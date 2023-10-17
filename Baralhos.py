@@ -27,22 +27,22 @@ class Baralho:
     def menorValor(self):
         if not self.cartas:
             return None
-        return min(self.cartas, key=self.card_value_as_number)
+        return (min(self.cartas, key=self.card_value_as_number)).valor
 
     def maiorValor(self):
         if not self.cartas:
             return None
-        return max(self.cartas, key=self.card_value_as_number)
+        return (max(self.cartas, key=self.card_value_as_number)).valor
 
     def primeiroNaipe(self):
         if not self.cartas:
             return None
-        return self.cartas[0].suit
+        return self.cartas[-1].naipe
 
     def ultimoNaipe(self):
         if not self.cartas:
             return None
-        return self.cartas[-1].suit
+        return self.cartas[0].naipe
 
     def pegaCarta(self):
         if len(self.cartas) > 0:
@@ -63,7 +63,7 @@ class Baralho:
         raise StopIteration
 
 class BaralhoPoker(Baralho):
-    def __init__(self, values = [], suits = []):
+    def __init__(self):
         super().__init__()
         self.create_deck()
 
@@ -72,15 +72,47 @@ class BaralhoPoker(Baralho):
         suits = ['Copas', 'Ouros', 'Paus', 'Espadas']
         super().create_deck(values, suits)
 
+class BaralhoTruco(Baralho):
+    def __init__(self):
+        super().__init__()
+        self.create_deck()
+    
+    def create_deck(self):
+        values = ['Ás', '2', '3', '4', '5', '6', '7', 'Valete', 'Cavalo', 'Rei']
+        suits = ['Ouros', 'Bastos', 'Copas', 'Espadas']
+        super().create_deck(values, suits)
+
+    def card_value_as_number(self, carta):
+        values = ['Ás', '2', '3', '4', '5', '6', '7', 'Valete', 'Cavalo', 'Rei']
+        return values.index(carta.valor)
+
 # values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Valete', 'Rainha', 'Rei', 'As']
 # suits = ['Copas', 'Ouros', 'Paus', 'Espadas']
 
-deck = BaralhoPoker()
-deck.embaralhar()
+deck_poker = BaralhoPoker()
+deck_poker.embaralhar()
 
-for card in deck:
-    carta = deck.pegaCarta()
-    if carta:
-        print(f"Carta: {carta}")
-    else:
-        print('cabo')
+deck_truco = BaralhoTruco()
+deck_truco.embaralhar()
+
+print('\nBaralho de Poker:')
+print('Maior valor do baralho: ' + str(deck_poker.maiorValor()))
+print('Menor valor do baralho: ' + str(deck_poker.menorValor()))
+print('Naipe da primeira carta: ' + str(deck_poker.primeiroNaipe()))
+print('Naipe da ultima carta: ' + str(deck_poker.ultimoNaipe()))
+# Se quiser a hierarquia entre os naipes teria que modificar o metodo; ordenando os naipes e fazendo que nem nos metods maiorValor() e menorValor()
+print('Carta no topo: ' + str(deck_poker.pegaCarta()))
+
+print('\n\nBaralho de Truco:')
+print('Maior valor do baralho: ' + str(deck_truco.maiorValor()))
+print('Menor valor do baralho: ' + str(deck_truco.menorValor()))
+print('Naipe da primeira carta: ' + str(deck_truco.primeiroNaipe()))
+print('Naipe da ultima carta: ' + str(deck_truco.ultimoNaipe()))
+print('Carta no topo: ' + str(deck_truco.pegaCarta()))
+print()
+
+# for card in deck_poker:
+#     print('Carta do baralho de Poker: ' + str(card))
+
+# for card in deck_truco:
+#     print('Carta do baralho de Truco: ' + str(card))
